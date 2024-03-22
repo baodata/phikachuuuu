@@ -1,6 +1,12 @@
 #include <iostream>
 #include <cstdlib>
 #include <ctime>
+#include <conio.h>
+
+#define KEY_UP 72
+#define KEY_DOWN 80
+#define KEY_LEFT 75
+#define KEY_RIGHT 77
 
 using namespace std;
 
@@ -17,6 +23,14 @@ void box(int x ,int y,char poke)
 	cout << " ----- "; moveCursorTo(x + 7, y);
 }
 
+void poinedBox(int x, int y, char poke)
+{
+	moveCursorTo(x, y);
+	cout << " ----- "; moveCursorTo(x, y + 1);
+	cout << "|\x1b[47m  \x1b[30m" << poke << "  \x1b[0m|"; moveCursorTo(x, y + 2);
+	cout << " ----- "; moveCursorTo(x + 7, y);
+}
+
 void emptyBox(int x, int y)
 {
 	moveCursorTo(x, y);
@@ -25,9 +39,21 @@ void emptyBox(int x, int y)
 	cout << "       "; moveCursorTo(x + 7, y);
 }
 
+void movePointer(int xmax, int ymax, int& x, int& y)
+{
+
+}
+
 struct title {
 	char pokemon;
 	bool empty = false;
+	bool chosen = false;
+};
+
+struct pointer
+{
+	int x = 0;
+	int y = 0;
 };
 
 int main()
@@ -41,7 +67,7 @@ int main()
 	//khoi tao
 	for (int i = 0; i < size; i +=2)
 	{
-		Pokemon[i] = Pokemon[i+1] = rand() % 10 + 'A';
+		Pokemon[i] = Pokemon[i+1] = rand() % 5 + 'A';
 		//cout << Pokemon[i] << " " << Pokemon[i+1] << " ";
 	}
 	//random
@@ -61,6 +87,8 @@ int main()
 	for (int i = 0; i < size; i++)
 		table[i / x][i % x].pokemon = Pokemon[i];
 
+	delete[] Pokemon;
+
 	for (int i = 0; i < y; i++)
 	{
 		for (int j = 0; j < x; j++)
@@ -68,25 +96,60 @@ int main()
 		cout << endl;
 	}
 
-	int xloc = 1;
-	int yloc = 10;
-	for (int i = 0; i < y; i++)
+	pointer a;
+	cout << "\x1b[?25l"; // an con tro
+	while (true)
 	{
-		for (int j = 0; j < x; j++)
+		int xloc = 10;
+		int yloc = 10;
+		for (int i = 0; i < y; i++)
 		{
-			if (table[i][j].empty == true)
-				emptyBox(xloc, yloc);
-			else
-				box(xloc, yloc,table[i][j].pokemon);
-			moveCursorTo(xloc, yloc);
-			xloc += 7;
+			for (int j = 0; j < x; j++)
+			{
+				if (j == a.x && i == a.y)
+					poinedBox(xloc, yloc, table[i][j].pokemon);
+				else
+					box(xloc, yloc, table[i][j].pokemon);
+				moveCursorTo(xloc, yloc);
+				xloc += 7;
+			}
+			xloc = 10;
+			yloc += 3;
 		}
-		xloc = 1;
-		yloc += 3;
+
+		cout << endl << endl << endl;
+
+		
+		char arrow;
+		switch (arrow = _getch())
+		{
+		case KEY_UP:
+			if (a.y == 0)
+				a.y = y-1;
+			else
+				a.y--;
+			break;
+		case KEY_DOWN:
+			if (a.y == y - 1)
+				a.y = 0;
+			else
+			a.y++;
+			break;
+		case KEY_RIGHT:
+			if (a.x == x - 1)
+				a.x = 0;
+			else
+				a.x++;
+			break;
+		case KEY_LEFT:
+			if (a.x == 0)
+				a.x = x - 1;
+			else
+				a.x--;
+			break;
+		}
+		cout << "x: " << a.x << " y: " << a.y;
 	}
-
-	cout << endl << endl << endl;
-
 	//giai phong
 	for (int i = 0; i < y; i++) {
 		delete[] table[i];
