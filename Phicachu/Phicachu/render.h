@@ -9,3 +9,8 @@ void printTable(tile** table, pointer a, int x, int y);
 void drawI(tile** table, pointer chosen, pointer a);
 void drawL(tile** table, pointer chosen, pointer current, int xtemp, int ytemp);
 void drawUZ(tile** table, pointer chosen, pointer current, int xtemp, int ytemp, int xtemp2, int ytemp2);
+void menuBox(menuButton button);
+void printOuterLine();
+void printTutorial();
+void printTimer(int s);
+void printInfoBoard();

@@ -42,11 +42,8 @@ void createGame(tile** table, int x, int y, int numOfChar)
 	delete[] Pokemon;
 }
 
-void customMode()
+void game(int x, int y)
 {
-	int x, y;
-	cout << "nhap chieu dai, chieu cao, nhap duoi 8 thoi";
-	cin >> x >> y;
 	tile** table = new tile * [y + 2];
 	for (int i = 0; i < y + 2; i++)
 		table[i] = new tile[x + 2];
@@ -56,6 +53,7 @@ void customMode()
 	bool haveChosen = false;
 	pointer chosen, current;
 	printTable(table, current, x, y);
+	printInfoBoard();
 
 	int tempx1, tempy1, tempx2, tempy2;
 
@@ -119,6 +117,13 @@ void customMode()
 				}
 				else
 				{
+					if ((chosen.x == tempx1 && chosen.y == tempy1) || (chosen.x == tempx2 && chosen.y == tempy2) || (current.x == tempx1 && current.y == tempy1) || (current.x == tempx2 && current.y == tempy2))	//dung
+					{
+						table[tempy1][tempx1].hinted = false;
+						table[tempy2][tempx2].hinted = false;
+						box(table[tempy1][tempx1].xCursor, table[tempy1][tempx1].yCursor, table[tempy1][tempx1]);
+						box(table[tempy2][tempx2].xCursor, table[tempy2][tempx2].yCursor, table[tempy2][tempx2]);
+					}
 					int xtemp, ytemp, xtemp2, ytemp2;
 					int check = checkAll(table, chosen.x, chosen.y, current.x, current.y, xtemp, ytemp, xtemp2, ytemp2, x, y);
 					if (table[chosen.y][chosen.x].pokemon == table[current.y][current.x].pokemon && check && (chosen.x != current.x || chosen.y != current.y))
@@ -134,7 +139,7 @@ void customMode()
 						box(table[chosen.y][chosen.x].xCursor, table[chosen.y][chosen.x].yCursor, table[chosen.y][chosen.x]);		//delete 2 hop
 						box(table[current.y][current.x].xCursor, table[current.y][current.x].yCursor, table[chosen.y][chosen.x]);
 					}
-					else
+					else  //sai
 					{
 						table[current.y][current.x].chosen = false;
 						table[chosen.y][chosen.x].chosen = false;
@@ -148,7 +153,6 @@ void customMode()
 		}
 		if (!checkAvailablePair(table, x, y, tempx1, tempy1, tempx2, tempy2))
 		{
-			cout << "win";
 			break;
 		}
 	}

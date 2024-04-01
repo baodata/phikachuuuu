@@ -5,8 +5,6 @@ using namespace std;
 
 int main()
 {
-	char pika[] = "pikachu.txt";
-	readAndWriteFile(pika);
-	customMode();
+	menu();
 	return 0;
 }

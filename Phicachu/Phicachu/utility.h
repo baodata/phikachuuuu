@@ -20,6 +20,21 @@ struct pointer
 	int y = 1;
 };
 
+struct menuButton
+{
+	char data[15];
+	bool chosen = false;
+	int xCursor;
+	int yCursor;
+	char description[55];
+};
+
+struct player
+{
+	char name[10];
+	int score;
+};
+
 void stop(int i);
 void moveCursorTo(int x, int y);
 void swapPoke(char& a, char& b);

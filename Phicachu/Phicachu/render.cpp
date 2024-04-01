@@ -1,6 +1,7 @@
 #include "render.h"
 #include <iostream>
 #include "utility.h"
+#include <string>
 
 using namespace std;
 
@@ -174,4 +175,60 @@ void drawUZ(tile** table, pointer chosen, pointer current, int xtemp, int ytemp,
 	deleteConnect(table, chosen.x, chosen.y, xtemp2, ytemp2);
 	deleteConnect(table, xtemp2, ytemp2, xtemp, ytemp);
 	deleteConnect(table, xtemp, ytemp, current.x, current.y);
+}
+
+void menuBox(menuButton button)
+{
+	moveCursorTo(button.xCursor, button.yCursor);
+	if (!button.chosen)
+		cout << " " << "\x1b[90m" << button.data << "                                                     \x1b[0m";
+	else if (button.chosen)
+		cout << "\x1b[1m>" << button.data << "<\x1b[33m\x1b[1m " << button.description << "\x1b[0m";
+}
+
+void printOuterLine()
+{
+	moveCursorTo(80, 1);
+	cout << char(218) << "---------------------------------------" << char(191);
+	for (int i = 0; i < 28; i++)
+	{
+		moveCursorTo(80, 2 + i);
+		cout << "|";
+		moveCursorTo(120, 2 + i);
+		cout << "|";
+	}
+	moveCursorTo(80, 30);
+	cout << char(192) << "---------------------------------------" << char(217);
+}
+
+void printTutorial()
+{
+	moveCursorTo(81, 2);
+	cout << "Use arrow keys to move.";
+	moveCursorTo(81, 4);
+	cout << "Enter/Space to choose.";
+	moveCursorTo(81, 6);
+	cout << "Connect 2 boxes with less than 2";
+	moveCursorTo(81, 7);
+	cout << "direction changes.";
+	moveCursorTo(81, 8);
+	cout << "(has similar pattern to the letters";
+	moveCursorTo(81, 9);
+	cout << "I, L, U, Z)";
+}
+
+void printTimer(int s)
+{
+	for (int i = s; i >= 0; --i) 
+	{
+		moveCursorTo(81, 11);
+		cout << i;
+		stop(1000);
+	}
+}//?
+
+void printInfoBoard()
+{
+	printOuterLine();
+	printTutorial();
 }

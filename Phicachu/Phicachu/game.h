@@ -5,4 +5,4 @@
 #include <ctime>
 
 void createGame(tile** table, int x, int y, int numOfChar);
-void customMode();
+void game(int x, int y);
