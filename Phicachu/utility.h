@@ -31,11 +31,13 @@ struct menuButton
 
 struct player
 {
-	char name[10];
 	int score;
+	char name[10];
 };
 
 void stop(int i);
 void moveCursorTo(int x, int y);
 void swapPoke(char& a, char& b);
-void countDown(int *s);
+void getPlayer(player& p,int& numberOfPlayer);
+void savePlayer(player p);
+void sapXepFile(int numberOfPlayer);
