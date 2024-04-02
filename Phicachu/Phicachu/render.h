@@ -12,5 +12,7 @@ void drawUZ(tile** table, pointer chosen, pointer current, int xtemp, int ytemp,
 void menuBox(menuButton button);
 void printOuterLine();
 void printTutorial();
-void printTimer(int s);
-void printInfoBoard();
+void printScore(int s);
+void printPlayer(player p);
+void printInfoBoard(int *secondsptr, player p);
+void printLeaderBoard();

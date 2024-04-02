@@ -1,6 +1,7 @@
 #include "render.h"
 #include <iostream>
 #include "utility.h"
+#include <fstream>
 #include <string>
 
 using namespace std;
@@ -215,20 +216,50 @@ void printTutorial()
 	cout << "(has similar pattern to the letters";
 	moveCursorTo(81, 9);
 	cout << "I, L, U, Z)";
+	moveCursorTo(81, 11);
+	cout << "Press h for hint (-10 points).";
+	moveCursorTo(81, 13);
+	cout << "You lose 1 point per second.";
+	moveCursorTo(81, 14);
+	cout << "(The maximum score is 200)";
 }
 
-void printTimer(int s)
+void printScore(int s)
 {
-	for (int i = s; i >= 0; --i) 
-	{
-		moveCursorTo(81, 11);
-		cout << i;
-		stop(1000);
-	}
-}//?
+	moveCursorTo(81, 20);
+	cout << "Score remaining: " << s << "  "; 
+}
 
-void printInfoBoard()
+void printPlayer(player p)
+{
+	moveCursorTo(81, 16);
+	cout << "Player: " << p.name;
+}
+
+void printInfoBoard(int *secondsptr, player p)
 {
 	printOuterLine();
 	printTutorial();
+	printScore(*secondsptr);
+	printPlayer(p);
+}
+
+void printLeaderBoard()
+{
+	system("cls");
+	moveCursorTo(40, 2);
+	cout << "LEADERBBOARD";
+	fstream fs;
+	fs.open("leaderboard.txt");
+	for (int i = 0; i < 10; i++)
+	{
+		moveCursorTo(10, (i+4)*2);
+		string name;
+		int score;
+		getline(fs, name, ';');
+		fs >> score;
+		fs.ignore();
+		cout << i + 1 << "> " << name; moveCursorTo(50, (i + 4) * 2); cout << score;
+	}
+	fs.close();
 }

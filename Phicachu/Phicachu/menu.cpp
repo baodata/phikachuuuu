@@ -5,6 +5,7 @@
 #include <fstream>
 #include <iostream>
 #include <conio.h>
+#include <thread>
 
 using namespace std;
 
@@ -42,8 +43,13 @@ void menu()
     strcpy_s(button[4].data, "EXIT");
     strcpy_s(button[4].description, "Embrace cowardice?");
     bool exit = false;
+    player p;
+    thread runGame;
+    thread timer;
     while (true)
     {
+        int seconds;
+        int* secondsptr = &seconds;
         bool returnToMenu = false;
         cout << "\x1b[?25l";
         system("cls");
@@ -82,16 +88,27 @@ void menu()
                 switch (pointed)
                 {
                 case 0:
-                    game(4, 4);
-                    game(6, 5);
-                    game(8, 6);
+                    getPlayer(p);
+                    *secondsptr = 200;
+                    timer = thread(countDown, secondsptr);
+                    runGame = thread(easy, secondsptr, p);
+                    runGame.join();
+                    timer.join();
                     break;
                 case 2:
+                    *secondsptr = NULL;
                     system("cls");
                     cout << "dai, cao?";
                     int x, y;
                     cin >> x >> y;
-                    game(x, y);
+                    game(x, y, secondsptr, p);
+                    break;
+                case 3:
+                    printLeaderBoard();
+                    while (_getch())
+                    {
+                        break;
+                    }
                     break;
                 case 4:
                     exit = true;

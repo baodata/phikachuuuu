@@ -42,7 +42,7 @@ void createGame(tile** table, int x, int y, int numOfChar)
 	delete[] Pokemon;
 }
 
-void game(int x, int y)
+void game(int x, int y, int *secondsptr, player p)
 {
 	tile** table = new tile * [y + 2];
 	for (int i = 0; i < y + 2; i++)
@@ -53,7 +53,7 @@ void game(int x, int y)
 	bool haveChosen = false;
 	pointer chosen, current;
 	printTable(table, current, x, y);
-	printInfoBoard();
+	printInfoBoard(secondsptr, p);
 
 	int tempx1, tempy1, tempx2, tempy2;
 
@@ -94,7 +94,7 @@ void game(int x, int y)
 				current.x--;
 			pointedBox(table[current.y][current.x].xCursor, table[current.y][current.x].yCursor, table[current.y][current.x]);
 			break;
-		case 'h': //hint
+		case 'h': //hint, can spam this for extremely low score
 			if (checkAvailablePair(table, x, y, tempx1, tempy1, tempx2, tempy2))
 			{
 				table[tempy1][tempx1].hinted = true;
@@ -102,6 +102,7 @@ void game(int x, int y)
 				box(table[tempy1][tempx1].xCursor, table[tempy1][tempx1].yCursor, table[tempy1][tempx1]);
 				box(table[tempy2][tempx2].xCursor, table[tempy2][tempx2].yCursor, table[tempy2][tempx2]);
 			}
+			*secondsptr = *secondsptr - 10;
 			break;
 		case ' ':
 		case '\r':
@@ -151,6 +152,7 @@ void game(int x, int y)
 			}
 			break;
 		}
+		printScore(*secondsptr);
 		if (!checkAvailablePair(table, x, y, tempx1, tempy1, tempx2, tempy2))
 		{
 			break;
@@ -161,4 +163,21 @@ void game(int x, int y)
 		delete[] table[i];
 	}
 	delete[] table;
+}
+
+void easy(int *secondsptr, player p)
+{
+	game(4, 4, secondsptr, p);
+	cout << "\x1b[33m"; printScore(*secondsptr); cout << "\x1b[0m";
+	stop(1500);
+	game(6, 5, secondsptr, p);
+	cout << "\x1b[33m"; printScore(*secondsptr); cout << "\x1b[0m";
+	stop(1500);
+	game(8, 6, secondsptr, p);
+	cout << "\x1b[33m"; printScore(*secondsptr); cout << "\x1b[0m";
+	stop(1500);
+	p.score = *secondsptr;
+	(*secondsptr) = -200;
+	savePlayer(p);
+	sortFile();
 }
