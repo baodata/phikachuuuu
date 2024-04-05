@@ -11,9 +11,9 @@ void box(int x, int y, tile a)	//https://stackoverflow.com/questions/3753055/how
 	moveCursorTo(x, y);
 	if (a.empty)
 	{
-		cout << "       "; moveCursorTo(x, y + 1);
-		cout << "       "; moveCursorTo(x, y + 2);
-		cout << "       "; moveCursorTo(x + 7, y);
+		cout << "\x1b[36m" << a.picture[0]; moveCursorTo(x, y + 1);
+		cout << a.picture[1]; moveCursorTo(x, y + 2);
+		cout << a.picture[2] << "\x1b[0m"; moveCursorTo(x + 7, y);
 	}
 	else if (a.chosen)
 	{
@@ -182,7 +182,7 @@ void menuBox(menuButton button)
 {
 	moveCursorTo(button.xCursor, button.yCursor);
 	if (!button.chosen)
-		cout << " " << "\x1b[90m" << button.data << "                                                     \x1b[0m";
+		cout << " " << "\x1b[90m" << button.data << "                                                                \x1b[0m";
 	else if (button.chosen)
 		cout << "\x1b[1m>" << button.data << "<\x1b[33m\x1b[1m " << button.description << "\x1b[0m";
 }
@@ -236,6 +236,29 @@ void printPlayer(player p)
 	cout << "Player: " << p.name;
 }
 
+void printMoveAnnouncement()
+{
+	moveCursorTo(81, 18);
+	cout << "\x1b[91mNO AVAILABLE MOVE: SHUFLING";
+	stop(500);
+	cout << ".";
+	stop(500);
+	cout << ".";
+	stop(500);
+	moveCursorTo(81, 18);
+	cout << "                              \x1b[0m";
+}
+
+void printWin()
+{
+	moveCursorTo(92, 26);
+	cout << "CONGRATULATION";
+	stop(1000);
+	moveCursorTo(95, 27);
+	cout << "YOU WIN!";
+	stop(2000);
+}
+
 void printInfoBoard(int *secondsptr, player p)
 {
 	printOuterLine();
@@ -247,8 +270,11 @@ void printInfoBoard(int *secondsptr, player p)
 void printLeaderBoard()
 {
 	system("cls");
+	cout << "press any keys to exit";
 	moveCursorTo(40, 2);
 	cout << "LEADERBBOARD";
+	moveCursorTo(8, 7);
+	cout << "-----------------------------------------------------------------------------";
 	fstream fs;
 	fs.open("leaderboard.txt");
 	for (int i = 0; i < 10; i++)
@@ -259,7 +285,27 @@ void printLeaderBoard()
 		getline(fs, name, ';');
 		fs >> score;
 		fs.ignore();
-		cout << i + 1 << "> " << name; moveCursorTo(50, (i + 4) * 2); cout << score;
+		cout << i + 1 << "> " << name; moveCursorTo(80, (i + 4) * 2); cout << score;
 	}
+
 	fs.close();
+}
+
+//for hard mode
+void printBoxRow(tile* a, int length)
+{
+	for (int i = 0; i <= length; i++)
+	{
+		box((a + i)->xCursor, (a + i)->yCursor, *(a + i));
+	}
+}
+
+void pushBox(tile* a, int length, int removedBox)
+{
+	for (int i = removedBox; i < length; i++)
+	{
+		(a + i)->pokemon = (a + i + 1)->pokemon;
+		(a + i)->empty = (a + i + 1)->empty;
+	}
+	(a + length)->empty = true;
 }

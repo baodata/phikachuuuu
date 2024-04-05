@@ -14,5 +14,10 @@ void printOuterLine();
 void printTutorial();
 void printScore(int s);
 void printPlayer(player p);
+void printMoveAnnouncement();
+void printWin();
 void printInfoBoard(int *secondsptr, player p);
 void printLeaderBoard();
+
+void printBoxRow(tile* a, int length);
+void pushBox(tile* a, int length, int removedBox);

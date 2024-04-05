@@ -1,6 +1,7 @@
 #include "utility.h"
 #include <iostream>
 #include <thread>
+#include <string>
 #include <fstream>
 
 using namespace std;
@@ -10,6 +11,7 @@ void getPlayer(player& p)
     system("cls");
     moveCursorTo(50, 12);
     cout << "Enter your name: ";
+    cin >> ws;
     getline(cin, p.name);
     p.score = 0;
 }
@@ -56,7 +58,22 @@ void sortFile()
     delete[] p;
 }
 
-
+void readBackground(tile** table, int x, int y, string filename)
+{
+    fstream file(filename);
+    string line;
+    for (int i = 1; i <= y; i++)    // table y
+    {
+        for (int k = 0; k < 3; k++)     // 3 dong picture
+        {
+            getline(file, line);
+            for (int j = 1; j <= x; j++)    //table x
+            {
+                table[i][j].picture[k] = line.substr(7 * (j - 1), 7 );
+            }
+        }
+    }
+}
 
 
 void stop(int i)

@@ -1,10 +1,10 @@
-test;97
-test 21;94
-test19;92
-test 2,;91
-test 23 24;91
-tes55;91
-test20;91
-abcde;7
-NULL;0
-NULL;0
+alo;172
+a;171
+test37;142
+a;128
+hard test;126
+trst;123
+a;120
+test 31;118
+a;116
+a;111

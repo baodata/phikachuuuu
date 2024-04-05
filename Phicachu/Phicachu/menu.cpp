@@ -33,9 +33,9 @@ void menu()
     }
     button[pointed].chosen = true;
     strcpy_s(button[0].data, "EASY");
-    strcpy_s(button[0].description, "A standard mode for new players.");
-    strcpy_s(button[1].data, "\x1b[9mHARD\x1b[0m");
-    strcpy_s(button[1].description, "We are currently not good enough to code this.");
+    strcpy_s(button[0].description, "The standard mode, you have 200 seconds to complete 3 levels.");
+    strcpy_s(button[1].data, "HARD");
+    strcpy_s(button[1].description, "A slightly harder mode, 250 seconds to complete 3 levels.");
     strcpy_s(button[2].data, "CUSTOM");
     strcpy_s(button[2].description, "Custom your way into the game.");
     strcpy_s(button[3].data, "LEADERBOARD");
@@ -43,7 +43,8 @@ void menu()
     strcpy_s(button[4].data, "EXIT");
     strcpy_s(button[4].description, "Embrace cowardice?");
     bool exit = false;
-    player p;
+    bool hard = false;
+    string background;
     thread runGame;
     thread timer;
     while (true)
@@ -57,7 +58,7 @@ void menu()
         readAndWriteFile(pika);
         for (int i = 0; i < 5; i++)
         {
-            stop(150);
+            stop(100);
             menuBox(button[i]);
         }
         while (true)
@@ -84,24 +85,38 @@ void menu()
             case ' ':
             case '\r':
             case '\n':
+                player p;
+                p.name.clear();
                 returnToMenu = true;
                 switch (pointed)
                 {
                 case 0:
+                    hard = false;
                     getPlayer(p);
                     *secondsptr = 200;
                     timer = thread(countDown, secondsptr);
-                    runGame = thread(easy, secondsptr, p);
+                    runGame = thread(level, secondsptr, p, hard);
+                    runGame.join();
+                    timer.join();
+                    break;
+                case 1:
+                    hard = true;
+                    getPlayer(p);
+                    *secondsptr = 250;
+                    timer = thread(countDown, secondsptr);
+                    runGame = thread(level, secondsptr, p, hard);
                     runGame.join();
                     timer.join();
                     break;
                 case 2:
                     *secondsptr = NULL;
+                    background = "blank.txt";
                     system("cls");
                     cout << "dai, cao?";
                     int x, y;
                     cin >> x >> y;
-                    game(x, y, secondsptr, p);
+                    game(x, y, secondsptr, p, hard, background);
+                    printWin();
                     break;
                 case 3:
                     printLeaderBoard();
