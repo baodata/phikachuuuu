@@ -18,6 +18,7 @@ void printMoveAnnouncement();
 void printWin();
 void printInfoBoard(int *secondsptr, player p);
 void printLeaderBoard();
+void printWinBoard(player p, bool hard);
 
 void printBoxRow(tile* a, int length);
 void pushBox(tile* a, int length, int removedBox);

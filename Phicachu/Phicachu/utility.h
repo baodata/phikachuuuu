@@ -47,3 +47,5 @@ void moveCursorTo(int x, int y);
 void swapPoke(char& a, char& b);
 void countDown(int *s);
 void readBackground(tile** table, int x, int y, string filename);
+wstring s2ws(const std::string& s);
+void makeSound(string sound);

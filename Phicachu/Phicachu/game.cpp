@@ -95,6 +95,7 @@ void game(int x, int y, int *secondsptr, player p, bool hard, string background)
 	system("cls");
 	bool haveChosen = false;
 	bool hintPressed = false;
+	string sound;
 	pointer chosen, current;
 	printTable(table, current, x, y);
 	printInfoBoard(secondsptr, p);
@@ -176,6 +177,8 @@ void game(int x, int y, int *secondsptr, player p, bool hard, string background)
 					int check = checkAll(table, chosen.x, chosen.y, current.x, current.y, xtemp, ytemp, xtemp2, ytemp2, x, y);
 					if (table[chosen.y][chosen.x].pokemon == table[current.y][current.x].pokemon && check && (chosen.x != current.x || chosen.y != current.y)) // dung
 					{
+						sound = "an.wav";
+						makeSound(sound);
 						pokeLeft -= 2;
 						if (!hard)
 						{
@@ -258,20 +261,26 @@ void game(int x, int y, int *secondsptr, player p, bool hard, string background)
 	delete[] table;
 }
 
-void level(int *secondsptr, player p, bool hard)
+void level(int* secondsptr, player p, bool hard)
 {
+	string sound = "win_level.wav";
 	game(4, 4, secondsptr, p, hard, "lvl1.txt");
 	cout << "\x1b[33m"; printScore(*secondsptr); cout << "\x1b[0m";
+	makeSound(sound);
 	stop(1500);
 	game(6, 5, secondsptr, p, hard, "lvl2.txt");
 	cout << "\x1b[33m"; printScore(*secondsptr); cout << "\x1b[0m";
+	makeSound(sound);
 	stop(1500);
 	game(8, 6, secondsptr, p, hard, "lvl3.txt");
 	cout << "\x1b[33m"; printScore(*secondsptr); cout << "\x1b[0m";
-	stop(1500);
+	makeSound(sound);
 	p.score = *secondsptr;
 	(*secondsptr) = -200;
+	sound = "win_game.wav";
+	makeSound(sound);
 	printWin();
 	savePlayer(p);
 	sortFile();
+	printWinBoard(p, hard);
 }

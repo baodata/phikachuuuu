@@ -291,6 +291,32 @@ void printLeaderBoard()
 	fs.close();
 }
 
+void printWinBoard(player p, bool hard)
+{
+	system("cls");
+	string sound = "appear.wav";
+	stop(200);
+	moveCursorTo(40, 10);
+	makeSound(sound);
+	cout << "PLAYER: " << p.name;
+	stop(1000);
+	moveCursorTo(40, 12);
+	makeSound(sound);
+	cout << "FINAL SCORE: " << p.score;
+	stop(1000);
+	makeSound(sound);
+	if (!hard)
+	{
+		moveCursorTo(40, 18);
+		cout << "press r to play again";
+		moveCursorTo(40, 19);
+		cout << "press h to play hard mode";
+	}
+	moveCursorTo(40, 20);
+	cout << "press ";  if (!hard) cout << "other "; else cout << "any "; cout << "keys to exit";
+	makeSound(sound);
+}
+
 //for hard mode
 void printBoxRow(tile* a, int length)
 {

@@ -45,6 +45,7 @@ void menu()
     bool exit = false;
     bool hard = false;
     string background;
+    string sound;
     thread runGame;
     thread timer;
     while (true)
@@ -52,6 +53,8 @@ void menu()
         int seconds;
         int* secondsptr = &seconds;
         bool returnToMenu = false;
+        bool hardMode = false;
+        bool replay = true;
         cout << "\x1b[?25l";
         system("cls");
         char pika[] = "pikachu.txt";
@@ -71,12 +74,16 @@ void menu()
             switch (arrow = _getch())
             {
             case KEY_DOWN:
+                sound = "bloop.wav";
+                makeSound(sound);
                 button[pointed].chosen = false;
                 if (pointed < 4)
                     pointed++;
                 button[pointed].chosen = true;
                 break;
             case KEY_UP:
+                sound = "bloop.wav";
+                makeSound(sound);
                 button[pointed].chosen = false;
                 if (pointed > 0)
                     pointed--;
@@ -85,6 +92,8 @@ void menu()
             case ' ':
             case '\r':
             case '\n':
+                sound = "bloop(high).wav";
+                makeSound(sound);
                 player p;
                 p.name.clear();
                 returnToMenu = true;
@@ -92,13 +101,30 @@ void menu()
                 {
                 case 0:
                     hard = false;
-                    getPlayer(p);
-                    *secondsptr = 200;
-                    timer = thread(countDown, secondsptr);
-                    runGame = thread(level, secondsptr, p, hard);
-                    runGame.join();
-                    timer.join();
-                    break;
+                    hardMode = false;
+                    replay = true;
+                    while (replay)
+                    {
+                        getPlayer(p);
+                        *secondsptr = 200;
+                        timer = thread(countDown, secondsptr);
+                        runGame = thread(level, secondsptr, p, hard);
+                        runGame.join();
+                        timer.join();
+                        char option;
+                        switch (option = _getch())
+                        {
+                        case 'r':
+                            break;
+                        case 'h':
+                            hardMode = true;
+                        default:
+                            replay = false;
+                            break;
+                        }
+                    }
+                    if (!hardMode)
+                        break;
                 case 1:
                     hard = true;
                     getPlayer(p);
@@ -107,6 +133,7 @@ void menu()
                     runGame = thread(level, secondsptr, p, hard);
                     runGame.join();
                     timer.join();
+                    _getch();
                     break;
                 case 2:
                     *secondsptr = NULL;
