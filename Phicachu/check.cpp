@@ -68,7 +68,6 @@ bool checkChuUZ(tile** table, int x1, int y1, int x2, int y2, int& xtemp, int& y
 	while (xtemp2 < xmax + 1)
 	{
 		xtemp2++;
-		//cout << "phai ";
 		if (!table[ytemp2][xtemp2].empty)
 			break;
 		else

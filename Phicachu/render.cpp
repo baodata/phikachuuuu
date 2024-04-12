@@ -1,50 +1,52 @@
 #include "render.h"
 #include <iostream>
 #include "utility.h"
+#include <fstream>
 #include <string>
+#include <conio.h>
 
 using namespace std;
 
-void box(int x, int y, tile a)	//https://stackoverflow.com/questions/3753055/how-can-i-display-extended-ascii-codes-characters-in-perl
+void box(tile a)	//https://stackoverflow.com/questions/3753055/how-can-i-display-extended-ascii-codes-characters-in-perl
 {
-	moveCursorTo(x, y);
+	moveCursorTo(a.xCursor, a.yCursor);
 	if (a.empty)
 	{
-		cout << "       "; moveCursorTo(x, y + 1);
-		cout << "       "; moveCursorTo(x, y + 2);
-		cout << "       "; moveCursorTo(x + 7, y);
+		cout << "\x1b[36m" << a.picture[0]; moveCursorTo(a.xCursor, a.yCursor + 1);
+		cout << a.picture[1]; moveCursorTo(a.xCursor, a.yCursor + 2);
+		cout << a.picture[2] << "\x1b[0m";
 	}
 	else if (a.chosen)
 	{
-		cout << char(218) << "-----" << char(191); moveCursorTo(x, y + 1);
-		cout << "|\x1b[42m  \x1b[30m" << a.pokemon << "  \x1b[0m|"; moveCursorTo(x, y + 2);
-		cout << char(192) << "-----" << char(217); moveCursorTo(x + 7, y);
+		cout << char(218) << "-----" << char(191); moveCursorTo(a.xCursor, a.yCursor + 1);
+		cout << "|\x1b[42m  \x1b[30m" << a.pokemon << "  \x1b[0m|"; moveCursorTo(a.xCursor, a.yCursor + 2);
+		cout << char(192) << "-----" << char(217);
 	}
 	else if (a.hinted)
 	{
-		cout << "\x1b[5m" << char(218) << "-----" << char(191); moveCursorTo(x, y + 1);
-		cout << "|  \x1b[" << (int)a.pokemon % (6) + 31 << "m" << a.pokemon << "\x1b[0m\x1b[5m  |"; moveCursorTo(x, y + 2);
+		cout << "\x1b[5m" << char(218) << "-----" << char(191); moveCursorTo(a.xCursor, a.yCursor + 1);
+		cout << "|  \x1b[" << (int)a.pokemon % (6) + 31 << "m" << a.pokemon << "\x1b[0m\x1b[5m  |"; moveCursorTo(a.xCursor, a.yCursor + 2);
 		cout << char(192) << "-----" << char(217) << "\x1b[0m";
 	}
 	else
 	{
-		cout << char(218) << "-----" << char(191); moveCursorTo(x, y + 1);
-		cout << "|  \x1b[" << (int)a.pokemon % (6) + 31 << "m" << a.pokemon << "\x1b[0m  |"; moveCursorTo(x, y + 2);	//https://gist.github.com/raghav4/48716264a0f426cf95e4342c21ada8e7
+		cout << char(218) << "-----" << char(191); moveCursorTo(a.xCursor, a.yCursor + 1);
+		cout << "|  \x1b[" << (int)a.pokemon % (6) + 31 << "m" << a.pokemon << "\x1b[0m  |"; moveCursorTo(a.xCursor, a.yCursor + 2);	//https://gist.github.com/raghav4/48716264a0f426cf95e4342c21ada8e7
 		cout << char(192) << "-----" << char(217);
 	}
 }
 
-void pointedBox(int x, int y, tile a)
+void pointedBox(tile a)
 {
-	moveCursorTo(x, y);
-	cout << " --*-- "; moveCursorTo(x, y + 1);
+	moveCursorTo(a.xCursor, a.yCursor);
+	cout << " --*-- "; moveCursorTo(a.xCursor, a.yCursor + 1);
 	cout << "*\x1b[47m  \x1b[30m";
 	if (!a.empty)
 		cout << a.pokemon;
 	else
 		cout << " ";
-	cout << "  \x1b[0m*"; moveCursorTo(x, y + 2);
-	cout << " --*-- "; moveCursorTo(x + 7, y);
+	cout << "  \x1b[0m*"; moveCursorTo(a.xCursor, a.yCursor + 2);
+	cout << " --*-- ";
 }
 
 void connectDrawing(tile** table, int x1, int y1, int x2, int y2)
@@ -127,7 +129,7 @@ void deleteConnect(tile** table, int x1, int y1, int x2, int y2)
 	}
 }
 
-void printTable(tile** table, pointer a, int x, int y)
+void getLocation(tile** table, pointer a, int x, int y)
 {
 	int xloc = 1;
 	int yloc = 1;
@@ -137,16 +139,27 @@ void printTable(tile** table, pointer a, int x, int y)
 		{
 			table[i][j].xCursor = xloc;
 			table[i][j].yCursor = yloc;
-			stop(1);
-			if (j == a.x && i == a.y)
-				pointedBox(xloc, yloc, table[i][j]);
-			else
-				box(xloc, yloc, table[i][j]);
-			moveCursorTo(xloc, yloc);
 			xloc += 7;
 		}
 		xloc = 1;
 		yloc += 3;
+	}
+}
+
+void printTable(tile** table, pointer a, int x, int y)
+{
+	getLocation(table, a, x, y);
+	for (int i = 0; i <= y + 1; i++)
+	{
+		for (int j = 0; j <= x + 1; j++)
+		{
+			stop(1);
+			if (j == a.x && i == a.y)
+				pointedBox(table[i][j]);
+			else
+				box(table[i][j]);
+			moveCursorTo(table[i][j].xCursor, table[i][j].yCursor);
+		}
 	}
 }
 
@@ -181,7 +194,7 @@ void menuBox(menuButton button)
 {
 	moveCursorTo(button.xCursor, button.yCursor);
 	if (!button.chosen)
-		cout << " " << "\x1b[90m" << button.data << "                                                     \x1b[0m";
+		cout << " " << "\x1b[90m" << button.data << "                                                                \x1b[0m";
 	else if (button.chosen)
 		cout << "\x1b[1m>" << button.data << "<\x1b[33m\x1b[1m " << button.description << "\x1b[0m";
 }
@@ -229,9 +242,123 @@ void printScore(int s)
 	cout << "Score remaining: " << s << "  "; 
 }
 
-void printInfoBoard(int *secondsptr)
+void printPlayer(player p)
+{
+	moveCursorTo(81, 16);
+	cout << "Player: " << p.name;
+}
+
+void printMoveAnnouncement()
+{
+	moveCursorTo(81, 18);
+	cout << "\x1b[91mNO AVAILABLE MOVE: SHUFLING";
+	stop(500);
+	cout << ".";
+	stop(500);
+	cout << ".";
+	stop(500);
+	moveCursorTo(81, 18);
+	cout << "                              \x1b[0m";
+}
+
+void printWin()
+{
+	moveCursorTo(92, 26);
+	cout << "CONGRATULATION";
+	stop(1000);
+	moveCursorTo(95, 27);
+	cout << "YOU WIN!";
+	stop(2000);
+}
+
+void printInfoBoard(int *secondsptr, player p)
 {
 	printOuterLine();
 	printTutorial();
 	printScore(*secondsptr);
+	printPlayer(p);
+}
+
+void printLeaderBoard()
+{
+	system("cls");
+	moveCursorTo(40, 2);
+	cout << "LEADERBBOARD";
+	moveCursorTo(8, 7);
+	cout << "-----------------------------------------------------------------------------";
+	fstream fs;
+	fs.open("leaderboard.txt");
+	for (int i = 0; i < 10; i++)
+	{
+		moveCursorTo(10, (i+4)*2);
+		string name;
+		int score;
+		getline(fs, name, ';');
+		if (i == 0)
+			cout << "\x1b[33m";
+		fs >> score;
+		fs.ignore();
+		cout << i + 1 << "> " << name; moveCursorTo(80, (i + 4) * 2); cout << score;
+		if (i == 0)
+			cout << "\x1b[0m";
+	}
+	moveCursorTo(90, 28);
+	cout << "press any keys to exit";
+	fs.close();
+}
+
+void printWinBoard(player p, bool hard, bool & hardMode, bool & replay)
+{
+	system("cls");
+	string sound = "appear.wav";
+	stop(200);
+	moveCursorTo(40, 10);
+	makeSound(sound);
+	cout << "PLAYER: " << p.name;
+	stop(1000);
+	moveCursorTo(40, 12);
+	makeSound(sound);
+	cout << "FINAL SCORE: " << p.score;
+	stop(1000);
+	makeSound(sound);
+	if (!hard)
+	{
+		moveCursorTo(40, 18);
+		cout << "press r to play again";
+		moveCursorTo(40, 19);
+		cout << "press h to play hard mode";
+	}
+	moveCursorTo(40, 20);
+	cout << "press ";  if (!hard) cout << "other "; else cout << "any "; cout << "keys to exit";
+	makeSound(sound);
+	char option;
+	switch (option = _getch())
+	{
+	case 'r':
+		break;
+	case 'h':
+		hardMode = true;
+	default:
+		replay = false;
+		break;
+	}
+}
+
+//for hard mode
+void printBoxRow(tile* a, int length)
+{
+	for (int i = 0; i <= length; i++)
+	{
+		box(*(a + i));
+	}
+}
+
+void pushBox(tile* a, int length, int removedBox)
+{
+	for (int i = removedBox; i < length; i++)
+	{
+		(a + i)->pokemon = (a + i + 1)->pokemon;
+		(a + i)->empty = (a + i + 1)->empty;
+	}
+	(a + length)->empty = true;
 }
