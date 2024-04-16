@@ -1,5 +1,6 @@
 #pragma once
 #include "utility.h"
+#include <conio.h>
 
 void box(tile a);
 void pointedBox(tile a);

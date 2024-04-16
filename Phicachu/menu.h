@@ -1,4 +1,3 @@
 #pragma once
-#include <string>
-void readAndWriteFile(char filename[]);
+#include "game.h"
 void menu();

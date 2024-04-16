@@ -1,5 +1,4 @@
 #include "check.h"
-#include "utility.h"
 
 bool checkChuI(tile** table, int x1, int y1, int x2, int y2)
 {

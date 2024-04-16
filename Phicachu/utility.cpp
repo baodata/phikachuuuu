@@ -1,9 +1,4 @@
 #include "utility.h"
-#include <Windows.h>
-#include <iostream>
-#include <thread>
-#include <string>
-#include <fstream>
 
 #pragma comment(lib, "winmm.lib")
 
@@ -78,6 +73,18 @@ void readBackground(tile** table, int x, int y, string filename)
     }
 }
 
+void readAndWriteFile(char filename[]) {
+    ifstream inputFile(filename);
+    if (inputFile.is_open()) {
+        string line;
+        while (getline(inputFile, line))
+            cout << "\x1b[33m" << line << "\x1b[0m" << endl;
+        inputFile.close();
+    }
+    else {
+        cout << "Game PIKACHU" << endl;
+    }
+}
 
 void stop(int i)
 {
@@ -120,4 +127,10 @@ wstring s2ws(const std::string& s) // https://stackoverflow.com/questions/627620
 void makeSound(string sound)    //https://stackoverflow.com/questions/9961949/playsound-in-c-console-application 
 {
     PlaySound(s2ws(sound).c_str(), NULL, SND_FILENAME| SND_ASYNC);
+}
+
+void setMaxNumber(int & x, int max)
+{
+    if (x > max)
+        x = max;
 }

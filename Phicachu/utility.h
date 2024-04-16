@@ -1,5 +1,9 @@
 #pragma once
 #include <string>
+#include <Windows.h>
+#include <iostream>
+#include <thread>
+#include <fstream>
 #define KEY_UP 72
 #define KEY_DOWN 80
 #define KEY_LEFT 75
@@ -48,5 +52,7 @@ void moveCursorTo(int x, int y);
 void swapPoke(char& a, char& b);
 void countDown(int *s);
 void readBackground(tile** table, int x, int y, string filename);
+void readAndWriteFile(char filename[]);
 wstring s2ws(const std::string& s);
 void makeSound(string sound);
+void setMaxNumber(int& x, int max);

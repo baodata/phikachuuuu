@@ -1,11 +1,3 @@
-#include <iostream>
-#include <cstdlib>
-#include <ctime>
-#include <conio.h>	// Key
-#include <thread> // sleep
-#include "render.h"
-#include "utility.h"
-#include "check.h"
 #include "game.h"
 
 using namespace std;

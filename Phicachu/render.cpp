@@ -1,9 +1,4 @@
 #include "render.h"
-#include <iostream>
-#include "utility.h"
-#include <fstream>
-#include <string>
-#include <conio.h>
 
 using namespace std;
 
@@ -231,8 +226,10 @@ void printTutorial()
 	moveCursorTo(81, 11);
 	cout << "Press h for hint (-10 points).";
 	moveCursorTo(81, 13);
+	cout << "Press Esc to exit.";
+	moveCursorTo(81, 15);
 	cout << "You lose 1 point per second.";
-	moveCursorTo(81, 14);
+	moveCursorTo(81, 16);
 	cout << "(The maximum score is 200)";
 }
 
@@ -244,7 +241,7 @@ void printScore(int s)
 
 void printPlayer(player p)
 {
-	moveCursorTo(81, 16);
+	moveCursorTo(81, 18);
 	cout << "Player: " << p.name;
 }
 

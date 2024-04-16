@@ -1,27 +1,6 @@
 #include "menu.h"
-#include "utility.h"
-#include "game.h"
-#include "render.h"
-#include "linkedList.h"
-#include <fstream>
-#include <iostream>
-#include <conio.h>
-#include <thread>
 
 using namespace std;
-
-void readAndWriteFile(char filename[]) {
-    ifstream inputFile(filename);
-    if (inputFile.is_open()) {
-        string line;
-        while (getline(inputFile, line))
-            cout << "\x1b[33m" << line << "\x1b[0m" << endl;
-        inputFile.close();
-    }
-    else {
-        cout << "Game PIKACHU" << endl;
-    }
-}
 
 void menu()
 {
@@ -42,10 +21,8 @@ void menu()
     strcpy_s(button[3].data, "LEADERBOARD");
     strcpy_s(button[3].description, "Hall of fame.");
     strcpy_s(button[4].data, "EXIT");
-    strcpy_s(button[4].description, "Embrace cowardice?");
-    bool exit = false;
-    bool quit = false;
-    bool hard = false;
+    strcpy_s(button[4].description, " ");
+
     string background;
     string sound;
     thread runGame;
@@ -57,6 +34,9 @@ void menu()
         bool returnToMenu = false;
         bool hardMode = false;
         bool replay = true;
+        bool exit = false;
+        bool quit = false;
+        bool hard = false;
         cout << "\x1b[?25l";
         system("cls");
         char pika[] = "pikachu.txt";
@@ -130,18 +110,52 @@ void menu()
                     *secondsptr = NULL;
                     background = "blank.txt";
                     system("cls");
-                    int x, y, pokeNum;
-                    moveCursorTo(50, 10);
-                    cout << "nhap chieu dai: ";
+                    int x, y, pokeNum; 
+                    moveCursorTo(40, 8);
+                    cout << "note: at least one of the two sizes must be even.";
+                    moveCursorTo(40, 10);
+                    cout << "Enter width (max: 8): ";
                     cin >> x;
-                    moveCursorTo(50, 12);
-                    cout << "nhap chieu cao: ";
+                    moveCursorTo(40, 12);
+                    cout << "Enter height (max: 8): ";
                     cin >> y;
-                    moveCursorTo(50, 14);
-                    cout << "nhap so pokemon khac nhau Max (default: 15): ";
+                    moveCursorTo(40, 14);
+                    cout << "Enter number of diferent Pokemons (max: 26): ";
                     cin >> pokeNum;
+                    moveCursorTo(40, 16);
+                    cout << "Current difficulty: ";
+                    moveCursorTo(40, 17);
+                    cout << "Press c to change, enter/space to confirm";
+                    while (true)
+                    {
+                        moveCursorTo(70, 16);
+                        if (hard)
+                            cout << "hard";
+                        else
+                            cout << "easy";
+                        char option;
+                        bool done = false;
+                        switch (option = _getch())
+                        {
+                        case 'c':
+                            hard = !hard;
+                            break;
+                        case ' ':
+                        case '\r':
+                        case '\n':
+                            done = true;
+                            break;
+                        }
+                        if (done)
+                            break;
+                    }
                     game(x, y, secondsptr, p, hard, background, pokeNum, exit);
-                    printWin();
+                    if (!exit)
+                    {
+                        sound = "win_level.wav";
+                        makeSound(sound);
+                        printWin();
+                    }
                     break;
                 case 3:
                     printLeaderBoard();

@@ -129,7 +129,6 @@
   <ItemGroup>
     <ClCompile Include="check.cpp" />
     <ClCompile Include="game.cpp" />
-    <ClCompile Include="linkedList.cpp" />
     <ClCompile Include="menu.cpp" />
     <ClCompile Include="render.cpp" />
     <ClCompile Include="main.cpp" />
@@ -138,7 +137,6 @@
   <ItemGroup>
     <ClInclude Include="check.h" />
     <ClInclude Include="game.h" />
-    <ClInclude Include="linkedList.h" />
     <ClInclude Include="menu.h" />
     <ClInclude Include="render.h" />
     <ClInclude Include="utility.h" />
