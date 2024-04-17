@@ -1,0 +1,9 @@
+﻿  check.cpp
+  game.cpp
+E:\Đại Học\HK II 2023-2024\Kỹ thuật lập trình\duan\Phicachu\Phicachu\game.cpp(7,12): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+  menu.cpp
+  render.cpp
+  main.cpp
+  utility.cpp
+  Generating Code...
+  Phicachu.vcxproj -> E:\Đại Học\HK II 2023-2024\Kỹ thuật lập trình\duan\Phicachu\x64\Debug\Phicachu.exe
