@@ -1,4 +1,0 @@
-﻿  Source.cpp
-E:\Đại Học\HK II 2023-2024\Kỹ thuật lập trình\duan\Phicachu\test\Source.cpp(81,112): warning C4102: 'https': unreferenced label
-E:\Đại Học\HK II 2023-2024\Kỹ thuật lập trình\duan\Phicachu\test\Source.cpp(299,12): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
-  test.vcxproj -> E:\Đại Học\HK II 2023-2024\Kỹ thuật lập trình\duan\Phicachu\x64\Debug\test.exe
